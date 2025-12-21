@@ -1,7 +1,9 @@
 {
     "variables": {},
     "tasks": [
-        "do my homework",
-        "clean my room"
+        "code this program",
+        "clean my room",
+        "do groceries",
+        "cook food"
     ]
 }

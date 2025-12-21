@@ -41,11 +41,48 @@ def remove_task():
 
       with open("data.json", "w") as f:
          json.dump(data, f, indent=4)
+
+def change_order():
+   #show the tasks
+   if(show_tasks()):
+
+
+      #enter the number of the task to move
+      print("Enter the task which you want to move:")
+      index = int(input(">>> ")) - 1
+      item = data["tasks"][index]
+      #highlight it somehow
+      while True:
+         os.system("cls")
+         for i, task in enumerate(data["tasks"]):
+            if i == index:
+               print(f"\033[1;43m{str(i+1)}. {task}\033[0m")
+            else:
+               print(str(i+1) + ". " + task)
+         print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
+         action = input(">>> ")
+
+      
+         if action == "":
+            break
+
+         data["tasks"].pop(index)
+
+         if action.lower() == "w":
+            data["tasks"].insert(index - 1, item)
+            index -= 1
+
+         if action.lower() == "s":
+            data["tasks"].insert(index + 1, item)
+            index += 1
+
+         with open("data.json", "w") as f:
+            json.dump(data, f, indent=4)
+
+
+      #move up or down with arrow keys
       
          
-   
-
-
 #load the file
 with open("data.json", "r") as f:
    data = json.load(f)
@@ -61,6 +98,7 @@ while True:
    print("Enter 1 to add a task")
    print("Enter 2 to remove a task")
    print("Enter 3 to quit the program")
+   print("Enter 4 to change the order")
    action = input(">>> ")
    if action == "1":
       os.system("cls")
@@ -69,8 +107,13 @@ while True:
    elif action == "2":
       os.system("cls")
       remove_task()
+
    elif action =="3":
       break
+
+   elif action =="4":
+      os.system("cls")
+      change_order()
       
    else:
       input("Not a valid action...")
