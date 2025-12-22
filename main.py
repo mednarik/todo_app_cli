@@ -1,5 +1,6 @@
 #show the user all the already added tasks and give a small controls menu below it (add task, remove task)
 
+
 import json, os
  
 def show_tasks():
@@ -26,18 +27,20 @@ def add_task():
       json.dump(data, f, indent=4)
       
 
-
 def remove_task():
    if(show_tasks()):
-      print("\nRemove Task (enter the index):")
-      
-      index = int(input(">>> ")) - 1
       
       while True:
-         if 0 <= index < len(data["tasks"]):
-            data["tasks"].pop(index)
-            break
-         else:
+         try:
+            index = int(input(">>> ")) - 1
+            if 0 <= index < len(data["tasks"]):
+               data["tasks"].pop(index)
+               break
+            
+            else:
+               input("Not a valid index...")
+
+         except Exception:
             input("Not a valid index...")
 
       with open("data.json", "w") as f:
@@ -49,42 +52,46 @@ def change_order():
 
 
       #enter the number of the task to move
-      print("Enter the task which you want to move:")
-      index = int(input(">>> ")) - 1
-      item = data["tasks"][index]
-      #highlight it somehow
-      while True:
-         os.system("cls")
-         for i, task in enumerate(data["tasks"]):
-            if i == index:
-               print(f"\033[1;43m{str(i+1)}. {task}\033[0m")
-            else:
-               print(str(i+1) + ". " + task)
-         print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
-         
-         action = input(">>> ")
+      print("Enter the index of the task you want to move:")
+      index = input(">>> ")
+      try:
+         index = int(index) - 1 
 
-         if action == "":
-            break
+         item = data["tasks"][index]
 
-         elif action.lower() == "w" and 0 < index:
-         
-            data["tasks"].pop(index)
-            data["tasks"].insert(index - 1, item)
-            index -= 1
-
-         elif action.lower() == "s" and index < len(data["tasks"]) - 1:
+         #highlight it somehow
+         while True:
+            os.system("cls")
+            for i, task in enumerate(data["tasks"]):
+               if i == index:
+                  print(f"\033[1;43m{str(i+1)}. {task}\033[0m")
+               else:
+                  print(str(i+1) + ". " + task)
+            print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
             
-            data["tasks"].pop(index)
-            data["tasks"].insert(index + 1, item)
-            index += 1
+            action = input(">>> ")
 
-         with open("data.json", "w") as f:
-            json.dump(data, f, indent=4)
+            if action == "":
+               break
 
+            elif action.lower() == "w" and 0 < index:
+            
+               data["tasks"].pop(index)
+               data["tasks"].insert(index - 1, item)
+               index -= 1
 
-      #move up or down with arrow keys
+            elif action.lower() == "s" and index < len(data["tasks"]) - 1:
+               
+               data["tasks"].pop(index)
+               data["tasks"].insert(index + 1, item)
+               index += 1
+
+            with open("data.json", "w") as f:
+               json.dump(data, f, indent=4)
       
+      except Exception:
+         input("Not a valid index...")
+         
          
 #load the file
 with open("data.json", "r") as f:
