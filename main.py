@@ -30,10 +30,11 @@ def add_task():
 def remove_task():
    if(show_tasks()):
       print("\nRemove Task (enter the index):")
+      
       index = int(input(">>> ")) - 1
-
+      
       while True:
-         if index <= len(data["tasks"]):
+         if 0 <= index < len(data["tasks"]):
             data["tasks"].pop(index)
             break
          else:
@@ -60,19 +61,21 @@ def change_order():
             else:
                print(str(i+1) + ". " + task)
          print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
+         
          action = input(">>> ")
 
-      
          if action == "":
             break
 
-         data["tasks"].pop(index)
-
-         if action.lower() == "w":
+         elif action.lower() == "w" and 0 < index:
+         
+            data["tasks"].pop(index)
             data["tasks"].insert(index - 1, item)
             index -= 1
 
-         if action.lower() == "s":
+         elif action.lower() == "s" and index < len(data["tasks"]) - 1:
+            
+            data["tasks"].pop(index)
             data["tasks"].insert(index + 1, item)
             index += 1
 
