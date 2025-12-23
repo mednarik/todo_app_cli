@@ -1,7 +1,8 @@
 #show the user all the already added tasks and give a small controls menu below it (add task, remove task)
 
 
-import json, os
+import json, os, time
+from datetime import datetime
 
 def show_tasks():
    if data["tasks"] == []:
@@ -19,11 +20,18 @@ def add_task():
    name = input(">>> ")
    file_name = name.lower().replace(" ","_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue") + ".txt"
 
-   data["tasks"].append({"name": name, "file": file_name})
+   now = datetime.now()
+   now = now.strftime("%Y-%m-%d %H:%M:%S")
+
+   data["tasks"].append({"name": name, "file": file_name, "date":now})
+
+   
 
    #add a description txt file to the task_files directory
    with open(f"task_files/{file_name}", "w") as f:
-      f.write("You can write a description of you Task here:\n\n") 
+      f.write(f"{now}\n\n")
+
+   
    
    #add the data to the json file
    with open("data.json", "w") as f: 
@@ -96,7 +104,25 @@ def change_order():
 
          with open("data.json", "w") as f:
                json.dump(data, f, indent=4)
-      
+
+def view_task():
+   if(show_tasks()):
+      print("Enter the index of the task you want to view:")
+      try:
+         index = int(input(">>> ")) - 1
+         file = data["tasks"][index]["file"]
+
+         with open(f"task_files/{file}", "r") as f:
+            print(f.read())
+
+         extra = input(">>> ")
+         with open(f"task_files/{file}", "a") as f:
+            f.write(extra)
+      except Exception:
+         input("Not a valid index...")
+         
+         
+
       
          
          
@@ -116,6 +142,7 @@ while True:
    print("Enter 2 to remove a task")
    print("Enter 3 to quit the program")
    print("Enter 4 to change the order")
+   print("Enter 5 to view a task")
    action = input(">>> ")
    if action == "1":
       os.system("cls")
@@ -131,6 +158,10 @@ while True:
    elif action =="4":
       os.system("cls")
       change_order()
+   
+   elif action =="5":
+      os.system("cls")
+      view_task()
       
    else:
       input("Not a valid action...")
