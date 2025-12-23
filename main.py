@@ -9,15 +9,40 @@ toDoList = data["toDo"]
 doneList = data["done"]
 
 def show_tasks():
-   space = 30
-   print(f"To Do{"|Done":>{space}}")
+   tab_space = 30
+
+   print(f"\033[4mTo Do\033[0m{"|\033[4mDone\033[0m":>{tab_space+8}}")
    if toDoList == []:
-      print("No tasks have been added yet")
-   
-   if toDoList != []:
-      for i in range(len(toDoList)):
-         print(str(i+1) + ". " + toDoList[i]["name"])
-      return True
+      if doneList == []:
+         print(f"No tasks have been added yet{"|":>{tab_space-27}}", end="")
+         print(f"No tasks have been added yet")
+
+      else:
+         print(f"No tasks have been added yet{"|":>{tab_space-27}}", end="")
+         print(doneList[0]["name"])
+         for i in range(1, len(doneList)):
+            print(f"{"":>{tab_space}}|", end="")
+            print(doneList[i]["name"])
+      return False
+
+   else:
+      if doneList == []:
+         print(f"{f"{str(1)}. {toDoList[0]['name']}":<{tab_space}}|No tasks have been added yet")
+         for i in range(1, len(toDoList)):
+            print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|")
+      else:
+         if len(toDoList) >= len(doneList):
+            for i in range(len(doneList)):
+               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|{doneList[i]["name"]}")
+            for i in range(len(toDoList) - len(doneList)):
+               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|")
+         else:
+            for i in range(len(toDoList)):
+               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|{doneList[i]["name"]}")
+               for i in range(len(doneList) - len(toDoList)):
+                  print(f"{"":<{tab_space}}|{doneList[i]["name"]}")
+
+         return True
    
 
 def add_task():
@@ -149,7 +174,7 @@ while True:
    #print the content
    show_tasks()
 
-   print("\nControls:")
+   print("\n\033[4mControls\033[0m")
    print("Enter 1 to add a task")
    print("Enter 2 to remove a task")
    print("Enter 3 to quit the program")

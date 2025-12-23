@@ -1,3 +1,4 @@
 num = 3
 
-print(type(num))
+for i in range(1,1):
+    print("smth")

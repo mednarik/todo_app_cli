@@ -1,6 +1,31 @@
 {
     "toDo": [
-       
+        {
+            "name": "brrarsh",
+            "file": "brrarsh.txt",
+            "date": "2025-12-23 22:25:09"
+        },
+        {
+            "name": "buy",
+            "file": "buy.txt",
+            "date": "2025-12-23 22:27:11"
+        },
+        {
+            "name": "waddup",
+            "file": "waddup.txt",
+            "date": "2025-12-23 22:34:16"
+        },
+        {
+            "name": "buy a house",
+            "file": "buy_a_house.txt",
+            "date": "2025-12-23 23:13:15"
+        }
     ],
-    "done": []
+    "done": [
+        {
+            "name": "yooo",
+            "file": "yooo.txt",
+            "date": "2025-12-23 22:34:26"
+        }
+    ]
 }
