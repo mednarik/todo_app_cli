@@ -2,14 +2,14 @@
 
 
 import json, os
- 
+
 def show_tasks():
    if data["tasks"] == []:
       print("No tasks have been added yet")
       return False
    else:
-      for i, task in enumerate(data["tasks"]):
-         print(str(i+1) + ". " + task)
+      for i in range(len(data["tasks"])):
+         print(str(i+1) + ". " + data["tasks"][i]["name"])
       return True
    
 
@@ -17,10 +17,13 @@ def add_task():
    #enter the task's name
    print("\nNew task:")
    name = input(">>> ")
+   file_name = name.lower().replace(" ","_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue") + ".txt"
 
+   data["tasks"].append({"name": name, "file": file_name})
 
-   data["tasks"].append(name)
-   
+   #add a description txt file to the task_files directory
+   with open(f"task_files/{file_name}", "w") as f:
+      f.write("You can write a description of you Task here:\n\n") 
    
    #add the data to the json file
    with open("data.json", "w") as f: 
@@ -34,6 +37,7 @@ def remove_task():
          try:
             index = int(input(">>> ")) - 1
             if 0 <= index < len(data["tasks"]):
+               os.remove(f"task_files/{data["tasks"][index]["file"]}")
                data["tasks"].pop(index)
                break
             
@@ -54,6 +58,7 @@ def change_order():
       #enter the number of the task to move
       print("Enter the index of the task you want to move:")
       index = input(">>> ")
+      
       try:
          index = int(index) - 1 
 
@@ -62,11 +67,11 @@ def change_order():
          #highlight it somehow
          while True:
             os.system("cls")
-            for i, task in enumerate(data["tasks"]):
+            for i in range(len(data["tasks"])):
                if i == index:
-                  print(f"\033[1;43m{str(i+1)}. {task}\033[0m")
+                  print(f"\033[1;43m{str(i+1)}. {data['tasks'][index]['name']}\033[0m")
                else:
-                  print(str(i+1) + ". " + task)
+                  print(str(i+1) + ". " + data["tasks"][i]["name"])
             print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
             
             action = input(">>> ")
@@ -77,20 +82,22 @@ def change_order():
             elif action.lower() == "w" and 0 < index:
             
                data["tasks"].pop(index)
-               data["tasks"].insert(index - 1, item)
                index -= 1
+               data["tasks"].insert(index, item)
+               
 
             elif action.lower() == "s" and index < len(data["tasks"]) - 1:
                
                data["tasks"].pop(index)
-               data["tasks"].insert(index + 1, item)
                index += 1
-
-            with open("data.json", "w") as f:
-               json.dump(data, f, indent=4)
-      
+               data["tasks"].insert(index, item)
       except Exception:
          input("Not a valid index...")
+
+         with open("data.json", "w") as f:
+               json.dump(data, f, indent=4)
+      
+      
          
          
 #load the file
