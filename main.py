@@ -1,16 +1,22 @@
-#show the user all the already added tasks and give a small controls menu below it (add task, remove task)
-
-
 import json, os, time
 from datetime import datetime
 
+#load the file
+with open("data.json", "r") as f:
+   data = json.load(f)
+
+toDoList = data["toDo"]
+doneList = data["done"]
+
 def show_tasks():
-   if data["tasks"] == []:
+   space = 30
+   print(f"To Do{"|Done":>{space}}")
+   if toDoList == []:
       print("No tasks have been added yet")
-      return False
-   else:
-      for i in range(len(data["tasks"])):
-         print(str(i+1) + ". " + data["tasks"][i]["name"])
+   
+   if toDoList != []:
+      for i in range(len(toDoList)):
+         print(str(i+1) + ". " + toDoList[i]["name"])
       return True
    
 
@@ -23,7 +29,7 @@ def add_task():
    now = datetime.now()
    now = now.strftime("%Y-%m-%d %H:%M:%S")
 
-   data["tasks"].append({"name": name, "file": file_name, "date":now})
+   toDoList.append({"name": name, "file": file_name, "date":now})
 
    
 
@@ -44,9 +50,9 @@ def remove_task():
       while True:
          try:
             index = int(input(">>> ")) - 1
-            if 0 <= index < len(data["tasks"]):
-               os.remove(f"task_files/{data["tasks"][index]["file"]}")
-               data["tasks"].pop(index)
+            if 0 <= index < len(toDoList):
+               os.remove(f"task_files/{toDoList[index]["file"]}")
+               toDoList.pop(index)
                break
             
             else:
@@ -70,16 +76,16 @@ def change_order():
       try:
          index = int(index) - 1 
 
-         item = data["tasks"][index]
+         item = toDoList[index]
 
          #highlight it somehow
          while True:
             os.system("cls")
-            for i in range(len(data["tasks"])):
+            for i in range(len(toDoList)):
                if i == index:
-                  print(f"\033[1;43m{str(i+1)}. {data['tasks'][index]['name']}\033[0m")
+                  print(f"\033[1;43m{str(i+1)}. {data['toDo'][index]['name']}\033[0m")
                else:
-                  print(str(i+1) + ". " + data["tasks"][i]["name"])
+                  print(str(i+1) + ". " + toDoList[i]["name"])
             print("\nUse 'W' to move up and 'S' to move down / press enter only to stop")
             
             action = input(">>> ")
@@ -89,16 +95,16 @@ def change_order():
 
             elif action.lower() == "w" and 0 < index:
             
-               data["tasks"].pop(index)
+               toDoList.pop(index)
                index -= 1
-               data["tasks"].insert(index, item)
+               toDoList.insert(index, item)
                
 
-            elif action.lower() == "s" and index < len(data["tasks"]) - 1:
+            elif action.lower() == "s" and index < len(toDoList) - 1:
                
-               data["tasks"].pop(index)
+               toDoList.pop(index)
                index += 1
-               data["tasks"].insert(index, item)
+               toDoList.insert(index, item)
       except Exception:
          input("Not a valid index...")
 
@@ -110,8 +116,9 @@ def view_task():
       print("Enter the index of the task you want to view:")
       try:
          index = int(input(">>> ")) - 1
-         file = data["tasks"][index]["file"]
+         file = toDoList[index]["file"]
 
+         os.system("cls")
          with open(f"task_files/{file}", "r") as f:
             print(f.read())
 
@@ -121,14 +128,19 @@ def view_task():
       except Exception:
          input("Not a valid index...")
          
-         
+def move_to_doneList():
+   if(show_tasks()):
+      print("Enter the index of the task you have competed:")
+      index = int(input(">>> ")) - 1
+      doneList.append(toDoList[index])
+      toDoList.pop(index)
+
+      with open("data.json", "w") as f:
+         json.dump(data, f, indent=4)
 
       
          
-         
-#load the file
-with open("data.json", "r") as f:
-   data = json.load(f)
+
 
 
 #handle the controls
@@ -143,6 +155,7 @@ while True:
    print("Enter 3 to quit the program")
    print("Enter 4 to change the order")
    print("Enter 5 to view a task")
+   print("Enter 6 to move a task from To Do to Done")
    action = input(">>> ")
    if action == "1":
       os.system("cls")
@@ -162,6 +175,10 @@ while True:
    elif action =="5":
       os.system("cls")
       view_task()
+   
+   elif action =="6":
+      os.system("cls")
+      move_to_doneList()
       
    else:
       input("Not a valid action...")
