@@ -8,41 +8,42 @@ with open("data.json", "r") as f:
 toDoList = data["toDo"]
 doneList = data["done"]
 
+underline_bold = "\033[1;4m"
+reset = "\033[0m"
+
 def show_tasks():
-   tab_space = 30
+   max_rows = max(len(toDoList), len(doneList))
+   tab = 33
 
-   print(f"\033[4mTo Do\033[0m{"|\033[4mDone\033[0m":>{tab_space+8}}")
+   print(f"{underline_bold}{f"To Do":<{tab}}{f"|Done":<{tab}}{reset}")
+
    if toDoList == []:
-      if doneList == []:
-         print(f"No tasks have been added yet{"|":>{tab_space-27}}", end="")
-         print(f"No tasks have been added yet")
-
-      else:
-         print(f"No tasks have been added yet{"|":>{tab_space-27}}", end="")
-         print(doneList[0]["name"])
-         for i in range(1, len(doneList)):
-            print(f"{"":>{tab_space}}|", end="")
-            print(doneList[i]["name"])
-      return False
-
+      todo_text = "No tasks have been added yet"
    else:
-      if doneList == []:
-         print(f"{f"{str(1)}. {toDoList[0]['name']}":<{tab_space}}|No tasks have been added yet")
-         for i in range(1, len(toDoList)):
-            print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|")
-      else:
-         if len(toDoList) >= len(doneList):
-            for i in range(len(doneList)):
-               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|{doneList[i]["name"]}")
-            for i in range(len(toDoList) - len(doneList)):
-               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|")
-         else:
-            for i in range(len(toDoList)):
-               print(f"{f"{str(i+1)}. {toDoList[i]['name']}":<{tab_space}}|{doneList[i]["name"]}")
-               for i in range(len(doneList) - len(toDoList)):
-                  print(f"{"":<{tab_space}}|{doneList[i]["name"]}")
+      todo_text = f"1. {toDoList[0]['name']}"
 
-         return True
+   if doneList == []:
+      done_text = "No tasks have been completed yet"
+   else:
+      done_text = doneList[0]["name"]
+
+   print(f"{todo_text:<{tab}}|{done_text}")
+   
+   for i in range(1, max_rows):
+      if i < len(toDoList):
+         todo_text = f"{i+1}. {toDoList[i]['name']}"
+      else:
+         todo_text = ""
+      
+      if i < len(doneList):
+         done_text = doneList[i]["name"]
+      else:
+         done_text = ""
+      
+      print(f"{todo_text:<{tab}}|{done_text}")
+
+   return bool(toDoList)
+
    
 
 def add_task():
@@ -174,7 +175,7 @@ while True:
    #print the content
    show_tasks()
 
-   print("\n\033[4mControls\033[0m")
+   print(f"\n{underline_bold}Controls{reset}")
    print("Enter 1 to add a task")
    print("Enter 2 to remove a task")
    print("Enter 3 to quit the program")
