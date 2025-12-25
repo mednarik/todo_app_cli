@@ -50,20 +50,13 @@ def add_task():
    #enter the task's name
    print("\nNew task:")
    name = input(">>> ")
-   file_name = name.lower().replace(" ","_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue") + ".txt"
+
 
    now = datetime.now()
    now = now.strftime("%Y-%m-%d %H:%M:%S")
 
-   toDoList.append({"name": name, "file": file_name, "date":now})
+   toDoList.append({"name": name, "description": "", "date":now, "subtasks":[]})
 
-   
-
-   #add a description txt file to the task_files directory
-   with open(f"task_files/{file_name}", "w") as f:
-      f.write(f"{now}\n\n")
-
-   
    
    #add the data to the json file
    with open("data.json", "w") as f: 
@@ -77,7 +70,6 @@ def remove_task():
          try:
             index = int(input(">>> ")) - 1
             if 0 <= index < len(toDoList):
-               os.remove(f"task_files/{toDoList[index]["file"]}")
                toDoList.pop(index)
                break
             
@@ -137,20 +129,19 @@ def change_order():
          with open("data.json", "w") as f:
                json.dump(data, f, indent=4)
 
-def view_task():
+def add_subtasks():
    if(show_tasks()):
-      print("Enter the index of the task you want to view:")
+      print("Enter the index of the task you want to add a subtask to:")
       try:
          index = int(input(">>> ")) - 1
-         file = toDoList[index]["file"]
 
          os.system("cls")
-         with open(f"task_files/{file}", "r") as f:
-            print(f.read())
 
-         extra = input(">>> ")
-         with open(f"task_files/{file}", "a") as f:
-            f.write(extra)
+         toDoList[index]["subtasks"] = []
+
+         with open("data.json", "w") as f:
+            json.dump(data, f, indent=4)
+
       except Exception:
          input("Not a valid index...")
          
@@ -200,7 +191,7 @@ while True:
    
    elif action =="5":
       os.system("cls")
-      view_task()
+      add_subtasks()
    
    elif action =="6":
       os.system("cls")
