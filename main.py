@@ -11,19 +11,28 @@ doneList = data["done"]
 underline_bold = "\033[1;4m"
 reset = "\033[0m"
 
-navigation_stack = [data["toDo"]]
+navigation_stack = [("root/",data["toDo"])]
 
 
+def get_path() -> str: #returns the path
+    path = []
+    for level in navigation_stack:
+        path.append(level[0])
+    path = "".join(path)
+    return path
 
 def update_file():
    with open("data.json", "w") as f:
       json.dump(data, f, indent=4)
 
 def show_tasks():
-   max_rows = max(len(navigation_stack[-1]), len(doneList))
+   current_level = navigation_stack[-1][1]
+   max_rows = max(len(current_level), len(doneList))
    tab = 50
-   current_level = navigation_stack[-1]
 
+
+   print(f"{underline_bold}Path{reset}: {get_path()}")
+   print()
    print(f"{underline_bold}{f"To Do":<{tab}}{f"|Done":<{tab}}{reset}")
 
    if current_level == []:
@@ -60,11 +69,12 @@ def add_task():
    print("\nNew task:")
    name = input(">>> ")
 
+   current_level = navigation_stack[-1][1]
 
    now = datetime.now()
    now = now.strftime("%Y-%m-%d %H:%M:%S")
 
-   navigation_stack[-1].append({"name": name, "description": "", "date":now, "subtasks":[]})
+   current_level.append({"name": name, "description": "", "date":now, "subtasks":[]})
 
    
    #add the data to the json file
@@ -73,7 +83,7 @@ def add_task():
 
 def remove_task():
    if(show_tasks()):
-      current_level = navigation_stack[-1]
+      current_level = navigation_stack[-1][1]
       
       while True:
          try:
@@ -94,7 +104,7 @@ def change_order():
    #show the tasks
    if(show_tasks()):
 
-      current_level = navigation_stack[-1]
+      current_level = navigation_stack[-1][1]
 
       #enter the number of the task to move
       print("Enter the index of the task you want to move:")
@@ -148,7 +158,11 @@ def open_task():
          print('Enter A/a to go back')
          user_input = input(">>> ")
 
+         current_level = navigation_stack[-1][1]
+
          os.system("cls")
+
+         
 
          if user_input.lower() == "a":
             if len(navigation_stack) > 1:
@@ -158,8 +172,9 @@ def open_task():
          
          
          else:
-            index = int(user_input) - 1 
-            navigation_stack.append(navigation_stack[-1][index]["subtasks"])
+            index = int(user_input) - 1
+            task = current_level[index]
+            navigation_stack.append((f"{task['name']}/", task["subtasks"]))
 
             
 
@@ -171,7 +186,7 @@ def open_task():
          
 def move_to_doneList():
    if(show_tasks()):
-      current_level = navigation_stack[-1]
+      current_level = navigation_stack[-1][1]
       print("Enter the index of the task you have competed:")
       index = int(input(">>> ")) - 1
       doneList.append(current_level[index])
@@ -180,7 +195,6 @@ def move_to_doneList():
       update_file()
 
 def clear_done():
-
    doneList.clear()
    update_file()
 

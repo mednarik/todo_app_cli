@@ -1,4 +1,3 @@
-num = 3
+liste = [1,2,3]
 
-for i in range(1,1):
-    print("smth")
+print(liste[-1])
