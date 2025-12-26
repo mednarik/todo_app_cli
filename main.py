@@ -5,15 +5,18 @@ from datetime import datetime
 with open("data.json", "r") as f:
    data = json.load(f)
 
+
 toDoList = data["toDo"]
 doneList = data["done"]
 
 underline_bold = "\033[1;4m"
 reset = "\033[0m"
 
+
+
 def show_tasks():
    max_rows = max(len(toDoList), len(doneList))
-   tab = 33
+   tab = 50
 
    print(f"{underline_bold}{f"To Do":<{tab}}{f"|Done":<{tab}}{reset}")
 
@@ -137,12 +140,11 @@ def add_subtasks():
 
          os.system("cls")
 
-         toDoList[index]["subtasks"] = []
 
          with open("data.json", "w") as f:
             json.dump(data, f, indent=4)
 
-      except Exception:
+      except IndexError:
          input("Not a valid index...")
          
 def move_to_doneList():
@@ -154,12 +156,6 @@ def move_to_doneList():
 
       with open("data.json", "w") as f:
          json.dump(data, f, indent=4)
-
-      
-         
-
-
-
 #handle the controls
 while True:
    os.system("cls")
@@ -171,7 +167,7 @@ while True:
    print("Enter 2 to remove a task")
    print("Enter 3 to quit the program")
    print("Enter 4 to change the order")
-   print("Enter 5 to view a task")
+   print("Enter 5 to add a subtask")
    print("Enter 6 to move a task from To Do to Done")
    action = input(">>> ")
    if action == "1":
