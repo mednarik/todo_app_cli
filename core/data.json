@@ -1,0 +1,31 @@
+{
+    "toDo": [
+        {
+            "name": "wassup",
+            "description": "",
+            "date": "2025-12-27 18:48:16",
+            "subtasks": [
+                {
+                    "name": "idk",
+                    "description": "",
+                    "date": "2025-12-27 18:49:19",
+                    "subtasks": []
+                }
+            ]
+        },
+        {
+            "name": "asdf",
+            "description": "",
+            "date": "2025-12-27 18:47:16",
+            "subtasks": []
+        }
+    ],
+    "done": [
+        {
+            "name": "path display",
+            "description": "",
+            "date": "2025-12-26 19:25:14",
+            "subtasks": []
+        }
+    ]
+}
