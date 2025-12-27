@@ -31,56 +31,6 @@
                     "subtasks": []
                 }
             ]
-        },
-        {
-            "name": "schule lernen",
-            "description": "",
-            "date": "2025-12-26 19:25:59",
-            "subtasks": [
-                {
-                    "name": "mathe",
-                    "description": "",
-                    "date": "2025-12-26 19:26:11",
-                    "subtasks": [
-                        {
-                            "name": "1",
-                            "description": "",
-                            "date": "2025-12-26 19:26:23",
-                            "subtasks": []
-                        },
-                        {
-                            "name": "5",
-                            "description": "",
-                            "date": "2025-12-26 19:26:25",
-                            "subtasks": []
-                        },
-                        {
-                            "name": "7",
-                            "description": "",
-                            "date": "2025-12-26 19:26:28",
-                            "subtasks": []
-                        }
-                    ]
-                },
-                {
-                    "name": "sew",
-                    "description": "",
-                    "date": "2025-12-26 19:26:14",
-                    "subtasks": []
-                },
-                {
-                    "name": "deutsch",
-                    "description": "",
-                    "date": "2025-12-26 19:26:16",
-                    "subtasks": []
-                }
-            ]
-        },
-        {
-            "name": "idk",
-            "description": "",
-            "date": "2025-12-26 23:15:51",
-            "subtasks": []
         }
     ],
     "done": [

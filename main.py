@@ -14,6 +14,9 @@ reset = "\033[0m"
 navigation_stack = [("root/",data["toDo"])]
 
 
+def clear_screen() -> None:
+    os.system("cls" if os.name == "nt" else "clear")
+
 def get_path() -> str: #returns the path
     path = []
     for level in navigation_stack:
@@ -21,11 +24,11 @@ def get_path() -> str: #returns the path
     path = "".join(path)
     return path
 
-def update_file():
+def update_file() -> None:
    with open("data.json", "w") as f:
       json.dump(data, f, indent=4)
 
-def show_tasks():
+def show_tasks() -> bool:
    current_level = navigation_stack[-1][1]
    max_rows = max(len(current_level), len(doneList))
    tab = 50
@@ -64,7 +67,7 @@ def show_tasks():
 
    
 
-def add_task():
+def add_task() -> None:
    #enter the task's name
    print("\nNew task:")
    name = input(">>> ")
@@ -81,26 +84,29 @@ def add_task():
    update_file()
       
 
-def remove_task():
+def remove_task() -> None:
    if(show_tasks()):
       current_level = navigation_stack[-1][1]
       
       while True:
          try:
             index = int(input(">>> ")) - 1
-            if 0 <= index < len(current_level):
+            if index >= 0:
                current_level.pop(index)
                break
-            
+            if index == -1:
+               break
             else:
-               input("Not a valid index...")
+               input("Invalid index (Index out of range)...")
+         except IndexError:
+            input("Invalid index (Index out of range)...")
 
-         except Exception:
-            input("Not a valid index...")
+         except ValueError:
+            input("Invalid index (Indices must be numbers)...")
 
       update_file()
 
-def change_order():
+def change_order() -> None:
    #show the tasks
    if(show_tasks()):
 
@@ -142,13 +148,16 @@ def change_order():
                current_level.pop(index)
                index += 1
                current_level.insert(index, item)
-      except Exception:
-         input("Not a valid index...")
+      except IndexError:
+         input("Invalid index (Index out of range)...")
+
+      except ValueError:
+         input("Invalid index (Indices must be numbers)...")
 
       update_file()
          
 
-def open_task():
+def open_task() -> None:
    if(show_tasks()):
       try:
             
@@ -184,7 +193,7 @@ def open_task():
       except ValueError:
          input("Invalid index (Indices must be numbers)...")
          
-def move_to_doneList():
+def move_to_doneList() -> None:
    if(show_tasks()):
       current_level = navigation_stack[-1][1]
       print("Enter the index of the task you have competed:")
@@ -194,7 +203,7 @@ def move_to_doneList():
 
       update_file()
 
-def clear_done():
+def clear_done() -> None:
    doneList.clear()
    update_file()
 
